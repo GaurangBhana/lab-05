@@ -1,6 +1,7 @@
 package com.example.lab5_starter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
     private ArrayList<City> cities;
     private Context context;
 
+    private int selectedPosition = -1;
+
     public CityArrayAdapter(Context context, ArrayList<City> cities){
         super(context, 0, cities);
         this.cities = cities;
@@ -30,12 +33,27 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
         }
 
         City city = cities.get(position);
-        TextView movieName = view.findViewById(R.id.textCityName);
-        TextView movieYear = view.findViewById(R.id.textCityProvince);
+        TextView cityName = view.findViewById(R.id.textCityName);
+        TextView cityProvince = view.findViewById(R.id.textCityProvince);
 
-        movieName.setText(city.getName());
-        movieYear.setText(city.getProvince());
+        cityName.setText(city.getName());
+        cityProvince.setText(city.getProvince());
+
+        if (position == selectedPosition) {
+            view.setBackgroundColor(Color.LTGRAY);
+        } else {
+            view.setBackgroundColor(Color.WHITE);
+        }
+
 
         return view;
     }
+
+    public void setSelectedPosition(int position) {
+        if(selectedPosition != position) {
+            selectedPosition = position;
+            notifyDataSetChanged();
+        }
+    }
+
 }

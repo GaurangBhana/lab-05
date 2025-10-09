@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
     private ListView cityListView;
 
     private ArrayList<City> cityArrayList;
-    private ArrayAdapter<City> cityArrayAdapter;
+    private CityArrayAdapter cityArrayAdapter;
 
     private FirebaseFirestore db;
 
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
         });
 
         deleteCityButton.setOnClickListener(view -> {
+            cityArrayAdapter.setSelectedPosition(-1);
             if (readyToDelete) {
                 Log.e("debug", "ready to delete");
                 deleteCityButton.setBackgroundColor(getResources().getColor(R.color.regular_button));
@@ -125,21 +126,24 @@ public class MainActivity extends AppCompatActivity implements CityDialogFragmen
                 stagedToDelete = -1;
                 confirmDeleteButton.hide();
                 deleteCityButton.setBackgroundColor(getResources().getColor(R.color.regular_button));
-                cityListView.setBackgroundColor(Color.WHITE);
+                cityArrayAdapter.setSelectedPosition(-1);
             }
         });
 
-        cityListView.setOnItemClickListener((adapterView, view, i, l) -> {
+        cityListView.setOnItemClickListener((adapterView, view, position, l) -> {
             if (!readyToDelete) {
-                City city = cityArrayAdapter.getItem(i);
+                City city = cityArrayAdapter.getItem(position);
                 CityDialogFragment cityDialogFragment = CityDialogFragment.newInstance(city);
                 cityDialogFragment.show(getSupportFragmentManager(), "City Details");
 
             } else {
-                stagedToDelete = i;
+                stagedToDelete = position;
                 confirmDeleteButton.show();
-                cityListView.setBackgroundColor(Color.WHITE);
-                view.setBackgroundColor(Color.LTGRAY);
+                //cityListView.setBackgroundColor(Color.WHITE);
+
+                cityArrayAdapter.setSelectedPosition(position);
+                //view.setBackgroundColor(Color.LTGRAY);
+
             }
         });
 
